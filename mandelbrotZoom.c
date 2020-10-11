@@ -2,8 +2,8 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>    //sudo apt-get install -y libsdl2-image-dev
 
-int WIDTH = 950;
-int HEIGHT = 950;
+int WIDTH = 1200;
+int HEIGHT = 1200;
 
 long double MIN = -2.84;
 long double MAX = 1.0;
@@ -42,7 +42,7 @@ int main(void){
     }
 
     //Create the window to draw in
-    SDL_Window* window = SDL_CreateWindow("Mandelbrot By Benjamin", SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,1000,1000,0);
+    SDL_Window* window = SDL_CreateWindow("Mandelbrot By Benjamin", SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WIDTH,HEIGHT,0);
     printf("Init success");
 
     //SDL_CreateWindow reutns 0 on sucess, so exit program gracefully if not 0
@@ -135,7 +135,21 @@ int main(void){
         if(count > 30){
             MAX_ITTERATION *= 1.2;
         }
+        //How many times have we zoomed?
         count++;
+
+        //Save each zoom as a bmp file
+
+        //Create a surface of the window
+        SDL_Surface *surface = SDL_GetWindowSurface(window);
+        SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, surface -> pixels, surface -> pitch);
+        char buf[12];
+        snprintf(buf, 12, "%d.bnp", count);
+
+        SDL_SaveBMP(surface, buf);
+
+        SDL_FreeSurface(surface);
+
 
     }
 
